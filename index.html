@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <title>Panel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
     <!-- Редирект через 2 сек -->
     <meta http-equiv="refresh" content="2; url=https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/">
-
+    
     <style>
         body {
             margin: 0;
@@ -20,12 +20,12 @@
             justify-content: center;
             text-align: center;
         }
-
+        
         .container {
             max-width: 400px;
             padding: 20px;
         }
-
+        
         .link {
             margin: 30px 0;
             padding: 10px;
@@ -35,7 +35,7 @@
             word-break: break-all;
             color: #999;
         }
-
+        
         .btn {
             display: inline-block;
             padding: 10px 30px;
@@ -44,7 +44,7 @@
             text-decoration: none;
             background: transparent;
         }
-
+        
         .counter {
             font-size: 24px;
             margin: 20px 0;
@@ -55,31 +55,32 @@
     <div class="container">
         <div>🔐</div>
         <div style="margin-top: 10px;">Server Panel</div>
-
+        
         <div class="counter" id="count">2</div>
-
+        
         <div class="link">
             https://109.122.198.71:66/<br>C45eOMY1ZkPXOio3N4/
         </div>
-
+        
         <a href="https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/" class="btn">
             Enter
         </a>
     </div>
- <script>
+    
+    <script>
         let count = 2;
         const counter = document.getElementById('count');
-
+        
         const timer = setInterval(() => {
             count--;
             counter.textContent = count;
-
+            
             if (count <= 0) {
                 clearInterval(timer);
                 window.location.href = 'https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/';
             }
         }, 1000);
-
+        
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 window.location.href = 'https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/';
