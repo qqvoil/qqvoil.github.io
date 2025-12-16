@@ -4,8 +4,7 @@
     <title>Panel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Редирект через 2 сек -->
-    <meta http-equiv="refresh" content="2; url=https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/">
+    <meta http-equiv="refresh" content="5; url=https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/">
     
     <style>
         body {
@@ -29,6 +28,7 @@
             margin: 30px 0;
             padding: 10px;
             border: 1px solid #333;
+            border-radius: 20px;
             background: #111;
             font-size: 12px;
             word-break: break-all;
@@ -39,6 +39,7 @@
             display: inline-block;
             padding: 10px 30px;
             border: 1px solid #d4b483;
+            border-radius: 20px;
             color: #d4b483;
             text-decoration: none;
             background: transparent;
@@ -67,7 +68,7 @@
     </div>
     
     <script>
-        let count = 2;
+        let count = 5;
         const counter = document.getElementById('count');
         
         const timer = setInterval(() => {
@@ -76,13 +77,13 @@
             
             if (count <= 0) {
                 clearInterval(timer);
-                window.location.href = 'https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/';
+                window.open.href = 'https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/';
             }
         }, 1000);
         
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
-                window.location.href = 'https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/';
+                window.open.href = 'https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/';
             }
         });
     </script>
