@@ -1,88 +1,363 @@
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Panel</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <style>
-        body {
-            margin: 0;
-            background: #0a0a0a;
-            color: #d4b483;
-            font-family: monospace;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        
-        .container {
-            max-width: 400px;
-            padding: 20px;
-        }
-        
-        .link {
-            margin: 30px 0;
-            padding: 10px;
-            border: 1px solid #333;
-            border-radius: 8px;
-            background: #111;
-            font-size: 12px;
-            word-break: break-all;
-            color: #999;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 10px 30px;
-            border: 1px solid #d4b483;
-            border-radius: 16px;
-            color: #d4b483;
-            text-decoration: none;
-            background: transparent;
-        }
-        
-        .counter {
-            font-size: 24px;
-            margin: 20px 0;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div style="margin-top: 10px;font-size: 24px;">Server Panel</div>
-        
-        <div class="counter" id="count">2</div>
-        
-        <div class="link">
-            https://109.122.198.71:66/<br>C45eOMY1ZkPXOio3N4/
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  ArrowUpRight,
+  Box,
+  Server,
+  Shield,
+  TerminalSquare,
+  ChevronRight,
+  Sparkles,
+  Lock,
+  Globe,
+  Cpu,
+} from "lucide-react";
+
+const LINKS = {
+  incus: "http://91.238.123.4:2280",
+  xui: "https://91.238.123.4:27552/9xTbksUarWItEp0GBu/",
+};
+
+const panels = [
+  {
+    title: "Incus Control",
+    eyebrow: "Container orchestration",
+    description:
+      "Your visual entry point for containers, shells, snapshots and host-level movement.",
+    href: LINKS.incus,
+    icon: Box,
+    accent: "from-fuchsia-500/20 via-white/5 to-transparent",
+    cta: "Open Incus",
+    details: ["ssh2incus", "web terminal", "host view"],
+  },
+  {
+    title: "X-UI Gateway",
+    eyebrow: "Traffic / edge",
+    description:
+      "Direct access to the Xray panel for inbounds, cert paths, routing and transport tuning.",
+    href: LINKS.xui,
+    icon: Shield,
+    accent: "from-cyan-400/20 via-white/5 to-transparent",
+    cta: "Open X-UI",
+    details: ["Xray", "TLS", "inbounds"],
+  },
+];
+
+const smallCards = [
+  {
+    title: "Frankfurt node",
+    text: "A tight little control surface for your server life. Built to feel more like a portfolio landing page than an admin index.",
+    icon: Globe,
+  },
+  {
+    title: "Aesthetic first",
+    text: "Big typography, soft gradients, dark glass, restrained motion, and clean hierarchy inspired by the references you dropped.",
+    icon: Sparkles,
+  },
+  {
+    title: "Minimal friction",
+    text: "Two primary doors. No clutter. No doc portal syndrome. Just instant access to the things you actually use.",
+    icon: Lock,
+  },
+];
+
+const quickFacts = [
+  ["Alias", "voil"],
+  ["Host vibe", "clean / dark / glossy"],
+  ["Primary stack", "Incus + X-UI"],
+  ["Mood", "control surface"],
+];
+
+function FloatingOrb({ className }: { className?: string }) {
+  return (
+    <motion.div
+      className={className}
+      animate={{ y: [0, -14, 0], x: [0, 8, 0] }}
+      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+    />
+  );
+}
+
+function Pill({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs uppercase tracking-[0.22em] text-white/60">
+      {children}
+    </span>
+  );
+}
+
+function PanelCard({
+  title,
+  eyebrow,
+  description,
+  href,
+  icon: Icon,
+  accent,
+  cta,
+  details,
+}: {
+  title: string;
+  eyebrow: string;
+  description: string;
+  href: string;
+  icon: React.ElementType;
+  accent: string;
+  cta: string;
+  details: string[];
+}) {
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      whileHover={{ y: -8 }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+    >
+      <div className={`absolute inset-0 bg-gradient-to-br ${accent} opacity-90`} />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_24%)]" />
+
+      <div className="relative z-10 flex h-full flex-col justify-between gap-10">
+        <div className="space-y-6">
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <div className="mb-3 text-xs uppercase tracking-[0.24em] text-white/45">
+                {eyebrow}
+              </div>
+              <h3 className="max-w-[12ch] text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
+                {title}
+              </h3>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-white/80">
+              <Icon className="h-6 w-6" />
+            </div>
+          </div>
+
+          <p className="max-w-[44ch] text-sm leading-7 text-white/65 md:text-base">
+            {description}
+          </p>
+
+          <div className="flex flex-wrap gap-2">
+            {details.map((item) => (
+              <span
+                key={item}
+                className="rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-white/55"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
-        
-        <a href="https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/" class="btn">
-            Enter
-        </a>
+
+        <div className="flex items-center justify-between gap-4 border-t border-white/10 pt-5">
+          <span className="inline-flex items-center gap-2 text-sm text-white/88">
+            {cta}
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </span>
+          <span className="text-xs uppercase tracking-[0.22em] text-white/35">
+            external
+          </span>
+        </div>
+      </div>
+    </motion.a>
+  );
+}
+
+export default function VoilControlSurface() {
+  return (
+    <div className="min-h-screen overflow-hidden bg-[#09090c] text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(192,132,252,0.16),transparent_30%),radial-gradient(circle_at_70%_20%,rgba(56,189,248,0.12),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_20%)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.8)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(circle_at_center,black,transparent_82%)]" />
+
+      <FloatingOrb className="pointer-events-none absolute left-[8%] top-24 h-40 w-40 rounded-full bg-fuchsia-400/15 blur-3xl" />
+      <FloatingOrb className="pointer-events-none absolute right-[8%] top-40 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl" />
+      <FloatingOrb className="pointer-events-none absolute bottom-16 left-[18%] h-40 w-40 rounded-full bg-white/10 blur-3xl" />
+
+      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col px-5 pb-10 pt-5 md:px-8 md:pb-16 md:pt-8">
+        <motion.header
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-8 rounded-[28px] border border-white/10 bg-white/[0.04] px-5 py-4 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl md:px-6"
+        >
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] text-sm font-medium tracking-[0.24em] text-white/90">
+                V
+              </div>
+              <div>
+                <div className="text-[11px] uppercase tracking-[0.28em] text-white/40">
+                  personal gateway
+                </div>
+                <div className="text-sm text-white/85">voil control surface</div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <Pill>incus host</Pill>
+              <Pill>xray edge</Pill>
+              <Pill>frankfurt</Pill>
+            </div>
+          </div>
+        </motion.header>
+
+        <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.05 }}
+            className="relative overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_28px_120px_rgba(0,0,0,0.45)] backdrop-blur-xl md:p-8"
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.16),transparent_22%),linear-gradient(135deg,rgba(255,255,255,0.06),transparent_45%)]" />
+
+            <div className="relative z-10 max-w-3xl">
+              <div className="mb-5 flex flex-wrap gap-2">
+                <Pill>dark glass</Pill>
+                <Pill>soft motion</Pill>
+                <Pill>utility wrapped in vanity</Pill>
+              </div>
+
+              <h1 className="max-w-[12ch] text-5xl font-semibold leading-[0.92] tracking-[-0.06em] text-white md:text-7xl">
+                A small portal for beautiful admin habits.
+              </h1>
+
+              <p className="mt-6 max-w-2xl text-sm leading-7 text-white/62 md:text-base md:leading-8">
+                Built as a stylish front door for the two interfaces that actually matter in your current stack.
+                Big type. Clean hierarchy. Subtle gradients. A little bit self-indulgent — as it should be.
+              </p>
+
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href={LINKS.incus}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white px-5 py-3 text-sm font-medium text-black transition-transform duration-300 hover:-translate-y-0.5"
+                >
+                  Open control stack
+                  <ChevronRight className="h-4 w-4" />
+                </a>
+
+                <a
+                  href={LINKS.xui}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-5 py-3 text-sm font-medium text-white/90 transition-transform duration-300 hover:-translate-y-0.5"
+                >
+                  Go to edge panel
+                  <ArrowUpRight className="h-4 w-4" />
+                </a>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.12 }}
+            className="grid gap-6"
+          >
+            <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.38)] backdrop-blur-xl">
+              <div className="mb-5 flex items-center justify-between">
+                <div>
+                  <div className="text-xs uppercase tracking-[0.24em] text-white/40">
+                    profile fragment
+                  </div>
+                  <div className="mt-2 text-2xl font-medium tracking-[-0.04em] text-white">
+                    voil
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-white/75">
+                  <TerminalSquare className="h-5 w-5" />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {quickFacts.map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="flex items-center justify-between gap-4 rounded-2xl border border-white/6 bg-black/20 px-4 py-3"
+                  >
+                    <span className="text-xs uppercase tracking-[0.2em] text-white/40">{label}</span>
+                    <span className="text-sm text-white/88">{value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.38)] backdrop-blur-xl">
+              <div className="mb-5 flex items-center gap-3">
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-white/80">
+                  <Cpu className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-xs uppercase tracking-[0.24em] text-white/40">
+                    note
+                  </div>
+                  <div className="text-sm text-white/70">
+                    Edit the two link constants at the top of this file if your ports or paths change.
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-white/8 bg-black/20 p-4 font-mono text-xs leading-6 text-white/65">
+                {`const LINKS = {\n  incus: "http://91.238.123.4:2280",\n  xui: "https://91.238.123.4:27552/...",\n};`}
+              </div>
+            </div>
+          </motion.div>
+        </section>
+
+        <section className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-2">
+          {panels.map((panel, index) => (
+            <motion.div
+              key={panel.title}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.18 + index * 0.1 }}
+            >
+              <PanelCard {...panel} />
+            </motion.div>
+          ))}
+        </section>
+
+        <section className="mt-8 grid gap-6 lg:grid-cols-3">
+          {smallCards.map((card, index) => {
+            const Icon = card.icon;
+            return (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.65, delay: 0.28 + index * 0.08 }}
+                className="rounded-[26px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.34)] backdrop-blur-xl"
+              >
+                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/20 text-white/80">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="text-xl font-medium tracking-[-0.04em] text-white">
+                  {card.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-white/62">
+                  {card.text}
+                </p>
+              </motion.div>
+            );
+          })}
+        </section>
+
+        <motion.footer
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.42 }}
+          className="mt-8 rounded-[28px] border border-white/10 bg-white/[0.04] px-6 py-5 text-sm text-white/50 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl"
+        >
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <span>Made for late-night server rituals, nicer entry points, and a bit too much visual taste.</span>
+            <span className="inline-flex items-center gap-2 text-white/35">
+              <Server className="h-4 w-4" />
+              private access surface
+            </span>
+          </div>
+        </motion.footer>
+      </main>
     </div>
-    
-    <script>
-        let count = 5;
-        const counter = document.getElementById('count');
-        
-        const timer = setInterval(() => {
-            count--;
-            counter.textContent = count;
-            
-            if (count <= 0) {
-                clearInterval(timer);
-                window.open = 'https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/';
-            }
-        }, 1000);
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                window.open = 'https://109.122.198.71:66/C45eOMY1ZkPXOio3N4/';
-            }
-        });
-    </script>
-</body>
-</html>
+  );
+}
