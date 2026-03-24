@@ -36,8 +36,8 @@
       --radius-md: 18px;
       --max: 1180px;
       --hero-speed: 1200ms;
-      --noise-opacity: 0.2;
-      --paper-fiber: rgba(122, 90, 66, 0.035);
+      --noise-opacity: 0.36;
+      --paper-fiber: rgba(122, 90, 66, 0.007);
       --toggle-bg: rgba(255,248,240,0.74);
       --toggle-text: #4e3526;
     }
@@ -67,8 +67,8 @@
       --button-soft-border: rgba(244, 227, 212, 0.08);
       --button-soft-text: #fff0e3;
       --shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
-      --noise-opacity: 0.2;
-      --paper-fiber: rgba(255, 226, 205, 0.022);
+      --noise-opacity: 0.36;
+      --paper-fiber: rgba(255, 226, 205, 0.005);
       --toggle-bg: rgba(84, 61, 49, 0.7);
       --toggle-text: #f3e2d4;
     }
@@ -314,11 +314,11 @@
           0deg,
           transparent 0,
           transparent 22px,
-          rgba(255,255,255,0.015) 22px,
+          rgba(255,255,255,0.005) 22px,
           transparent 23px,
           transparent 40px
         );
-      opacity: 0.22;
+      opacity: 0.06;
     }
 
     .dashboard-top {
@@ -551,20 +551,20 @@
       padding: 0 18px;
       text-decoration: none;
       border-radius: 999px;
-      background: linear-gradient(180deg, #ee8b82, #e06c63);
+      background: linear-gradient(180deg, #f09086, #e16f65);
       color: #fff9f6;
       font-size: 14px;
       font-weight: 600;
       letter-spacing: -0.01em;
-      box-shadow: 0 14px 30px rgba(237,117,106,0.18);
+      box-shadow: 0 14px 30px rgba(237,117,106,0.22);
       transition: transform 160ms ease, box-shadow 160ms ease;
     }
 
     .service-action.secondary {
-      background: var(--button-soft);
-      color: var(--button-soft-text);
-      border: 1px solid var(--button-soft-border);
-      box-shadow: none;
+      background: linear-gradient(180deg, #f09086, #e16f65);
+      color: #fff9f6;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 14px 30px rgba(237,117,106,0.22);
     }
 
     .service-action:hover { transform: translateY(-2px); }
@@ -794,12 +794,14 @@
       const themeToggle = document.getElementById('themeToggle');
       const themeIcon = document.getElementById('themeIcon');
       const themeLabel = document.getElementById('themeLabel');
-      const storedTheme = localStorage.getItem('voil-theme');
+      const storageKey = 'voil-theme-v2';
+      localStorage.removeItem('voil-theme');
+      const storedTheme = localStorage.getItem(storageKey);
       const initialTheme = storedTheme || 'light';
 
       function applyTheme(theme) {
         root.setAttribute('data-theme', theme);
-        localStorage.setItem('voil-theme', theme);
+        localStorage.setItem(storageKey, theme);
         themeIcon.textContent = theme === 'dark' ? '☀' : '☾';
         themeLabel.textContent = theme === 'dark' ? 'Light' : 'Dark';
       }
