@@ -1,363 +1,900 @@
-import React from "react";
-import { motion } from "framer-motion";
-import {
-  ArrowUpRight,
-  Box,
-  Server,
-  Shield,
-  TerminalSquare,
-  ChevronRight,
-  Sparkles,
-  Lock,
-  Globe,
-  Cpu,
-} from "lucide-react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>voil — Personal Gateway</title>
+  <meta name="theme-color" content="#d8c0ab" />
+  <style>
+    :root {
+      --bg: #f6ede3;
+      --bg-2: #efdfcf;
+      --panel: rgba(255, 248, 240, 0.72);
+      --panel-strong: rgba(255, 248, 240, 0.84);
+      --line: rgba(87, 57, 37, 0.12);
+      --line-soft: rgba(87, 57, 37, 0.08);
+      --text: #3d2b20;
+      --muted: #6f594b;
+      --soft: #9a806f;
+      --softest: rgba(111, 89, 75, 0.45);
+      --deep: #4e3526;
+      --accent: #ed756a;
+      --accent-soft: #f0a69e;
+      --ok: #7f9d75;
+      --warn: #ac8861;
+      --off: #bb7c73;
+      --chip: rgba(255, 248, 240, 0.62);
+      --chip-border: rgba(87, 57, 37, 0.08);
+      --chip-text: #5b4334;
+      --clock-bg: rgba(255, 248, 240, 0.56);
+      --button-soft: rgba(252, 245, 238, 0.76);
+      --button-soft-border: rgba(87, 57, 37, 0.08);
+      --button-soft-text: #4e3526;
+      --shadow: 0 30px 70px rgba(93, 58, 37, 0.12);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --max: 1180px;
+      --hero-speed: 1200ms;
+      --noise-opacity: 0.2;
+      --paper-fiber: rgba(122, 90, 66, 0.035);
+      --toggle-bg: rgba(255,248,240,0.74);
+      --toggle-text: #4e3526;
+    }
 
-const LINKS = {
-  incus: "http://91.238.123.4:2280",
-  xui: "https://91.238.123.4:27552/9xTbksUarWItEp0GBu/",
-};
+    :root[data-theme="dark"] {
+      --bg: #241914;
+      --bg-2: #2c2019;
+      --panel: rgba(55, 39, 31, 0.72);
+      --panel-strong: rgba(59, 42, 34, 0.8);
+      --line: rgba(244, 227, 212, 0.1);
+      --line-soft: rgba(244, 227, 212, 0.06);
+      --text: #f2e0d1;
+      --muted: #c9b3a1;
+      --soft: #a88d7c;
+      --softest: rgba(201, 179, 161, 0.42);
+      --deep: #fff4ea;
+      --accent: #ed756a;
+      --accent-soft: #f0a398;
+      --ok: #8cab80;
+      --warn: #c49c70;
+      --off: #cc8479;
+      --chip: rgba(84, 61, 49, 0.62);
+      --chip-border: rgba(244, 227, 212, 0.08);
+      --chip-text: #ead7c7;
+      --clock-bg: rgba(78, 57, 46, 0.58);
+      --button-soft: rgba(84, 61, 49, 0.72);
+      --button-soft-border: rgba(244, 227, 212, 0.08);
+      --button-soft-text: #fff0e3;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+      --noise-opacity: 0.2;
+      --paper-fiber: rgba(255, 226, 205, 0.022);
+      --toggle-bg: rgba(84, 61, 49, 0.7);
+      --toggle-text: #f3e2d4;
+    }
 
-const panels = [
-  {
-    title: "Incus Control",
-    eyebrow: "Container orchestration",
-    description:
-      "Your visual entry point for containers, shells, snapshots and host-level movement.",
-    href: LINKS.incus,
-    icon: Box,
-    accent: "from-fuchsia-500/20 via-white/5 to-transparent",
-    cta: "Open Incus",
-    details: ["ssh2incus", "web terminal", "host view"],
-  },
-  {
-    title: "X-UI GateWay",
-    eyebrow: "Traffic / edge",
-    description:
-      "Direct access to the Xray panel for inbounds, cert paths, routing and transport tuning.",
-    href: LINKS.xui,
-    icon: Shield,
-    accent: "from-cyan-400/20 via-white/5 to-transparent",
-    cta: "Open X-UI",
-    details: ["Xray", "TLS", "inbounds"],
-  },
-];
+    * { box-sizing: border-box; }
 
-const smallCards = [
-  {
-    title: "Frankfurt node",
-    text: "A tight little control surface for your server life. Built to feel more like a portfolio landing page than an admin index.",
-    icon: Globe,
-  },
-  {
-    title: "Aesthetic first",
-    text: "Big typography, soft gradients, dark glass, restrained motion, and clean hierarchy inspired by the references you dropped.",
-    icon: Sparkles,
-  },
-  {
-    title: "Minimal friction",
-    text: "Two primary doors. No clutter. No doc portal syndrome. Just instant access to the things you actually use.",
-    icon: Lock,
-  },
-];
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    }
 
-const quickFacts = [
-  ["Alias", "voil"],
-  ["Host vibe", "clean / dark / glossy"],
-  ["Primary stack", "Incus + X-UI"],
-  ["Mood", "control surface"],
-];
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(237,117,106,0.10), transparent 28%),
+        radial-gradient(circle at 84% 14%, rgba(158,109,80,0.10), transparent 24%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+      overflow-x: hidden;
+      transition: background-color 240ms ease, color 240ms ease;
+    }
 
-function FloatingOrb({ className }: { className?: string }) {
-  return (
-    <motion.div
-      className={className}
-      animate={{ y: [0, -14, 0], x: [0, 8, 0] }}
-      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-    />
-  );
-}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: var(--noise-opacity);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cfilter id='n2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.35' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n2)'/%3E%3C/svg%3E");
+      background-size: 180px 180px, 220px 220px;
+      mix-blend-mode: multiply;
+    }
 
-function Pill({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-xs uppercase tracking-[0.22em] text-white/60">
-      {children}
-    </span>
-  );
-}
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          102deg,
+          transparent 0,
+          transparent 16px,
+          var(--paper-fiber) 16px,
+          transparent 17px,
+          transparent 31px
+        ),
+        radial-gradient(circle at 50% 20%, rgba(255,255,255,0.12), transparent 28%);
+      opacity: 0.85;
+    }
 
-function PanelCard({
-  title,
-  eyebrow,
-  description,
-  href,
-  icon: Icon,
-  accent,
-  cta,
-  details,
-}: {
-  title: string;
-  eyebrow: string;
-  description: string;
-  href: string;
-  icon: React.ElementType;
-  accent: string;
-  cta: string;
-  details: string[];
-}) {
-  return (
-    <motion.a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      whileHover={{ y: -8 }}
-      transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl"
-    >
-      <div className={`absolute inset-0 bg-gradient-to-br ${accent} opacity-90`} />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.16),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_24%)]" />
+    .wrap {
+      position: relative;
+      z-index: 1;
+    }
 
-      <div className="relative z-10 flex h-full flex-col justify-between gap-10">
-        <div className="space-y-6">
-          <div className="flex items-start justify-between gap-6">
+    .theme-toggle {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 20;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--toggle-bg);
+      color: var(--toggle-text);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 16px 36px rgba(66, 43, 28, 0.08);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 160ms ease, background-color 180ms ease, color 180ms ease;
+    }
+
+    .theme-toggle:hover { transform: translateY(-2px); }
+
+    .theme-toggle .theme-icon {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      font-size: 13px;
+      line-height: 1;
+    }
+
+    .hero-screen,
+    .dashboard-shell {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    .hero-screen {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 32px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-screen::before,
+    .hero-screen::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(60px);
+      pointer-events: none;
+      opacity: 0.68;
+    }
+
+    .hero-screen::before {
+      width: 320px;
+      height: 320px;
+      top: 8%;
+      left: -80px;
+      background: rgba(237,117,106,0.16);
+      animation: drift-a 16s ease-in-out infinite;
+    }
+
+    .hero-screen::after {
+      width: 300px;
+      height: 300px;
+      bottom: 6%;
+      right: -40px;
+      background: rgba(116, 86, 63, 0.10);
+      animation: drift-b 18s ease-in-out infinite;
+    }
+
+    .hero-inner {
+      width: min(1120px, 100%);
+      position: relative;
+      text-align: center;
+    }
+
+    .hero-kicker {
+      margin: 0 0 14px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.32em;
+      color: var(--soft);
+      animation: fade-up 0.8s ease both;
+    }
+
+    .hero-title {
+      margin: 0;
+      font-size: clamp(56px, 12vw, 168px);
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      color: var(--deep);
+      font-weight: 700;
+      animation: hero-rise var(--hero-speed) cubic-bezier(.2,.8,.2,1) both;
+      text-wrap: balance;
+    }
+
+    .hero-subtle {
+      margin: 18px auto 0;
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+      animation: fade-up 0.9s ease 0.25s both;
+    }
+
+    .hero-enter {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 26px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--chip);
+      color: var(--deep);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 12px 34px rgba(85, 54, 36, 0.08);
+      transition: transform 160ms ease, background-color 160ms ease;
+      animation: fade-up 0.9s ease 0.45s both;
+    }
+
+    .hero-enter:hover { transform: translateY(-2px); }
+
+    .hero-enter .arrow { font-size: 16px; }
+
+    .dashboard-shell {
+      width: min(var(--max), calc(100% - 26px));
+      min-height: calc(100vh - 72px);
+      margin: 0 auto 0;
+      padding: 18px 0 10px;
+      transform: translateY(18px);
+      opacity: 0;
+      animation: dashboard-arrive 0.95s ease 0.75s both;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .dashboard {
+      width: 100%;
+      border-radius: var(--radius-xl);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .dashboard::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at top right, rgba(237,117,106,0.08), transparent 24%),
+        linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03));
+    }
+
+    .dashboard::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent 0,
+          transparent 22px,
+          rgba(255,255,255,0.015) 22px,
+          transparent 23px,
+          transparent 40px
+        );
+      opacity: 0.22;
+    }
+
+    .dashboard-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.68), rgba(255,255,255,0.22));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+      flex: 0 0 auto;
+    }
+
+    .avatar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), transparent 32%);
+      mix-blend-mode: screen;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center 24%;
+      transform: scale(1.06);
+      filter: saturate(0.96) contrast(1.02);
+    }
+
+    .brand-overline {
+      margin: 0 0 4px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: var(--soft);
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 16px;
+      color: var(--deep);
+      font-weight: 600;
+    }
+
+    .clocks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .clock {
+      min-width: 112px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: var(--clock-bg);
+      border: 1px solid var(--chip-border);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+
+    .clock-label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--soft);
+    }
+
+    .clock-value {
+      display: block;
+      font-size: 16px;
+      letter-spacing: -0.04em;
+      color: var(--deep);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dashboard-body {
+      position: relative;
+      z-index: 1;
+      padding: 28px 20px 18px;
+    }
+
+    .dashboard-heading {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .dashboard-heading h2 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      color: var(--deep);
+      font-weight: 700;
+    }
+
+    .dashboard-heading p {
+      margin: 8px 0 0;
+      max-width: 420px;
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .dashboard-mini {
+      padding-bottom: 6px;
+      color: var(--soft);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      white-space: nowrap;
+    }
+
+    .access-card {
+      border-radius: 24px;
+      border: 1px solid rgba(87,57,37,0.1);
+      background: var(--panel-strong);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .access-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), transparent 30%);
+    }
+
+    .service-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) auto auto;
+      gap: 14px;
+      align-items: center;
+      padding: 18px 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-row + .service-row {
+      border-top: 1px solid rgba(87,57,37,0.08);
+    }
+
+    .service-name {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .service-title {
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--deep);
+      font-weight: 600;
+    }
+
+    .service-subtitle {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: var(--chip);
+      border: 1px solid var(--chip-border);
+      color: var(--chip-text);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      white-space: nowrap;
+      font-weight: 600;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+      box-shadow: 0 0 0 4px rgba(0,0,0,0.025);
+    }
+
+    .status-online .status-dot { background: var(--ok); }
+    .status-offline .status-dot { background: var(--off); }
+    .status-unavailable .status-dot { background: var(--warn); }
+    .status-checking .status-dot { background: var(--soft); }
+
+    .service-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 144px;
+      min-height: 48px;
+      padding: 0 18px;
+      text-decoration: none;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ee8b82, #e06c63);
+      color: #fff9f6;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      box-shadow: 0 14px 30px rgba(237,117,106,0.18);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .service-action.secondary {
+      background: var(--button-soft);
+      color: var(--button-soft-text);
+      border: 1px solid var(--button-soft-border);
+      box-shadow: none;
+    }
+
+    .service-action:hover { transform: translateY(-2px); }
+
+    .service-arrow { font-size: 16px; line-height: 1; }
+
+    .footer-note {
+      width: min(var(--max), calc(100% - 26px));
+      margin: 0 auto 28px;
+      padding: 10px 6px 0;
+      font-size: 12px;
+      line-height: 1.75;
+      color: var(--softest);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .footer-note .asterisk {
+      color: var(--softest);
+      line-height: 1;
+      transform: translateY(2px);
+      font-size: 13px;
+      flex: 0 0 auto;
+    }
+
+    @keyframes hero-rise {
+      from {
+        opacity: 0;
+        transform: translateY(22px) scale(0.985);
+        letter-spacing: -0.03em;
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        letter-spacing: -0.08em;
+      }
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes dashboard-arrive {
+      from { opacity: 0; transform: translateY(36px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes drift-a {
+      0%, 100% { transform: translate3d(0,0,0); }
+      50% { transform: translate3d(16px,-18px,0); }
+    }
+
+    @keyframes drift-b {
+      0%, 100% { transform: translate3d(0,0,0); }
+      50% { transform: translate3d(-10px,14px,0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .dashboard-top,
+      .dashboard-heading {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .clocks { justify-content: flex-start; }
+
+      .service-row {
+        grid-template-columns: 1fr;
+        align-items: flex-start;
+      }
+
+      .status-pill,
+      .service-action {
+        width: fit-content;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .theme-toggle {
+        top: 12px;
+        right: 12px;
+        min-height: 42px;
+        padding: 0 14px;
+      }
+
+      .hero-screen { min-height: 90vh; }
+
+      .dashboard-shell {
+        width: min(var(--max), calc(100% - 16px));
+        min-height: calc(100vh - 56px);
+        margin-bottom: 0;
+        padding-top: 12px;
+      }
+
+      .dashboard,
+      .access-card { border-radius: 24px; }
+
+      .dashboard-top,
+      .dashboard-body,
+      .service-row { padding-left: 16px; padding-right: 16px; }
+
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 16px;
+      }
+
+      .hero-subtle {
+        font-size: 13px;
+        max-width: 460px;
+      }
+
+      .clock {
+        min-width: 96px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+    <span class="theme-icon" id="themeIcon">☾</span>
+    <span id="themeLabel">Dark</span>
+  </button>
+
+  <div class="wrap">
+    <section class="hero-screen" aria-label="Intro">
+      <div class="hero-inner">
+        <p class="hero-kicker">Private entry point</p>
+        <h1 class="hero-title">Personal<br/>Gateway</h1>
+        <p class="hero-subtle">Warm. Quiet. Expensive. Softly textured.</p>
+        <a class="hero-enter" href="#dashboard" id="enterButton">Enter <span class="arrow">↓</span></a>
+      </div>
+    </section>
+
+    <section class="dashboard-shell" id="dashboard">
+      <div class="dashboard">
+        <div class="dashboard-top">
+          <div class="brand">
+            <div class="avatar"><img src="./avatar.jpg" alt="voil avatar" /></div>
             <div>
-              <div className="mb-3 text-xs uppercase tracking-[0.24em] text-white/45">
-                {eyebrow}
-              </div>
-              <h3 className="max-w-[12ch] text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
-                {title}
-              </h3>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-white/80">
-              <Icon className="h-6 w-6" />
+              <p class="brand-overline">Personal Gateway</p>
+              <p class="brand-title">voil</p>
             </div>
           </div>
 
-          <p className="max-w-[44ch] text-sm leading-7 text-white/65 md:text-base">
-            {description}
-          </p>
-
-          <div className="flex flex-wrap gap-2">
-            {details.map((item) => (
-              <span
-                key={item}
-                className="rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-white/55"
-              >
-                {item}
-              </span>
-            ))}
+          <div class="clocks">
+            <div class="clock">
+              <span class="clock-label">UTC</span>
+              <span class="clock-value" id="clock-utc">--:--:--</span>
+            </div>
+            <div class="clock">
+              <span class="clock-label">MSK</span>
+              <span class="clock-value" id="clock-msk">--:--:--</span>
+            </div>
+            <div class="clock">
+              <span class="clock-label">Frankfurt</span>
+              <span class="clock-value" id="clock-fra">--:--:--</span>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-4 border-t border-white/10 pt-5">
-          <span className="inline-flex items-center gap-2 text-sm text-white/88">
-            {cta}
-            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-          </span>
-          <span className="text-xs uppercase tracking-[0.22em] text-white/35">
-            external
-          </span>
+        <div class="dashboard-body">
+          <div class="dashboard-heading">
+            <div>
+              <h2>Access</h2>
+              <p>Direct links to the two panels that matter.</p>
+            </div>
+            <div class="dashboard-mini">Compact control surface</div>
+          </div>
+
+          <div class="access-card">
+            <div class="service-row">
+              <div class="service-name">
+                <div class="service-title">Incus Control</div>
+                <div class="service-subtitle">ssh2incus / instances / terminal</div>
+              </div>
+
+              <div class="status-pill status-unavailable" id="status-incus">
+                <span class="status-dot"></span>
+                <span>unavailable</span>
+              </div>
+
+              <a class="service-action secondary" href="http://91.238.123.4:2280" target="_blank" rel="noreferrer">
+                Open <span class="service-arrow">↗</span>
+              </a>
+            </div>
+
+            <div class="service-row">
+              <div class="service-name">
+                <div class="service-title">X-UI Gateway</div>
+                <div class="service-subtitle">xray / tls / edge</div>
+              </div>
+
+              <div class="status-pill status-checking" id="status-xui">
+                <span class="status-dot"></span>
+                <span>checking</span>
+              </div>
+
+              <a class="service-action" href="https://91.238.123.4:27552/9xTbksUarWItEp0GBu/" target="_blank" rel="noreferrer">
+                Open <span class="service-arrow">↗</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
-    </motion.a>
-  );
-}
+    </section>
 
-export default function VoilControlSurface() {
-  return (
-    <div className="min-h-screen overflow-hidden bg-[#09090c] text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(192,132,252,0.16),transparent_30%),radial-gradient(circle_at_70%_20%,rgba(56,189,248,0.12),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_20%)]" />
-      <div className="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.8)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(circle_at_center,black,transparent_82%)]" />
-
-      <FloatingOrb className="pointer-events-none absolute left-[8%] top-24 h-40 w-40 rounded-full bg-fuchsia-400/15 blur-3xl" />
-      <FloatingOrb className="pointer-events-none absolute right-[8%] top-40 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl" />
-      <FloatingOrb className="pointer-events-none absolute bottom-16 left-[18%] h-40 w-40 rounded-full bg-white/10 blur-3xl" />
-
-      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col px-5 pb-10 pt-5 md:px-8 md:pb-16 md:pt-8">
-        <motion.header
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8 rounded-[28px] border border-white/10 bg-white/[0.04] px-5 py-4 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl md:px-6"
-        >
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] text-sm font-medium tracking-[0.24em] text-white/90">
-                V
-              </div>
-              <div>
-                <div className="text-[11px] uppercase tracking-[0.28em] text-white/40">
-                  personal gateway
-                </div>
-                <div className="text-sm text-white/85">voil control surface</div>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-2">
-              <Pill>incus host</Pill>
-              <Pill>xray edge</Pill>
-              <Pill>frankfurt</Pill>
-            </div>
-          </div>
-        </motion.header>
-
-        <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.05 }}
-            className="relative overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_28px_120px_rgba(0,0,0,0.45)] backdrop-blur-xl md:p-8"
-          >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.16),transparent_22%),linear-gradient(135deg,rgba(255,255,255,0.06),transparent_45%)]" />
-
-            <div className="relative z-10 max-w-3xl">
-              <div className="mb-5 flex flex-wrap gap-2">
-                <Pill>dark glass</Pill>
-                <Pill>soft motion</Pill>
-                <Pill>utility wrapped in vanity</Pill>
-              </div>
-
-              <h1 className="max-w-[12ch] text-5xl font-semibold leading-[0.92] tracking-[-0.06em] text-white md:text-7xl">
-                A small portal for beautiful admin habits.
-              </h1>
-
-              <p className="mt-6 max-w-2xl text-sm leading-7 text-white/62 md:text-base md:leading-8">
-                Built as a stylish front door for the two interfaces that actually matter in your current stack.
-                Big type. Clean hierarchy. Subtle gradients. A little bit self-indulgent — as it should be.
-              </p>
-
-              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={LINKS.incus}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white px-5 py-3 text-sm font-medium text-black transition-transform duration-300 hover:-translate-y-0.5"
-                >
-                  Open control stack
-                  <ChevronRight className="h-4 w-4" />
-                </a>
-
-                <a
-                  href={LINKS.xui}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-5 py-3 text-sm font-medium text-white/90 transition-transform duration-300 hover:-translate-y-0.5"
-                >
-                  Go to edge panel
-                  <ArrowUpRight className="h-4 w-4" />
-                </a>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.12 }}
-            className="grid gap-6"
-          >
-            <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.38)] backdrop-blur-xl">
-              <div className="mb-5 flex items-center justify-between">
-                <div>
-                  <div className="text-xs uppercase tracking-[0.24em] text-white/40">
-                    profile fragment
-                  </div>
-                  <div className="mt-2 text-2xl font-medium tracking-[-0.04em] text-white">
-                    voil
-                  </div>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-white/75">
-                  <TerminalSquare className="h-5 w-5" />
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                {quickFacts.map(([label, value]) => (
-                  <div
-                    key={label}
-                    className="flex items-center justify-between gap-4 rounded-2xl border border-white/6 bg-black/20 px-4 py-3"
-                  >
-                    <span className="text-xs uppercase tracking-[0.2em] text-white/40">{label}</span>
-                    <span className="text-sm text-white/88">{value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.38)] backdrop-blur-xl">
-              <div className="mb-5 flex items-center gap-3">
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-3 text-white/80">
-                  <Cpu className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="text-xs uppercase tracking-[0.24em] text-white/40">
-                    note
-                  </div>
-                  <div className="text-sm text-white/70">
-                    Edit the two link constants at the top of this file if your ports or paths change.
-                  </div>
-                </div>
-              </div>
-              <div className="rounded-2xl border border-white/8 bg-black/20 p-4 font-mono text-xs leading-6 text-white/65">
-                {`const LINKS = {\n  incus: "http://91.238.123.4:2280",\n  xui: "https://91.238.123.4:27552/...",\n};`}
-              </div>
-            </div>
-          </motion.div>
-        </section>
-
-        <section className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-2">
-          {panels.map((panel, index) => (
-            <motion.div
-              key={panel.title}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.18 + index * 0.1 }}
-            >
-              <PanelCard {...panel} />
-            </motion.div>
-          ))}
-        </section>
-
-        <section className="mt-8 grid gap-6 lg:grid-cols-3">
-          {smallCards.map((card, index) => {
-            const Icon = card.icon;
-            return (
-              <motion.div
-                key={card.title}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, delay: 0.28 + index * 0.08 }}
-                className="rounded-[26px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.34)] backdrop-blur-xl"
-              >
-                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-black/20 text-white/80">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <h3 className="text-xl font-medium tracking-[-0.04em] text-white">
-                  {card.title}
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-white/62">
-                  {card.text}
-                </p>
-              </motion.div>
-            );
-          })}
-        </section>
-
-        <motion.footer
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.42 }}
-          className="mt-8 rounded-[28px] border border-white/10 bg-white/[0.04] px-6 py-5 text-sm text-white/50 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl"
-        >
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <span>Made for late-night server rituals, nicer entry points, and a bit too much visual taste.</span>
-            <span className="inline-flex items-center gap-2 text-white/35">
-              <Server className="h-4 w-4" />
-              private access surface
-            </span>
-          </div>
-        </motion.footer>
-      </main>
+    <div class="footer-note">
+      <span class="asterisk">*</span>
+      <span>Incus live status becomes available once that panel is exposed over HTTPS. Until then, this page keeps the check understated rather than faking certainty. The rest of the surface stays intentionally quiet — warm palette, soft grain, compact motion.</span>
     </div>
-  );
-}
+  </div>
+
+  <script>
+    (function () {
+      const root = document.documentElement;
+      const themeToggle = document.getElementById('themeToggle');
+      const themeIcon = document.getElementById('themeIcon');
+      const themeLabel = document.getElementById('themeLabel');
+      const storedTheme = localStorage.getItem('voil-theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
+
+      function applyTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        localStorage.setItem('voil-theme', theme);
+        themeIcon.textContent = theme === 'dark' ? '☀' : '☾';
+        themeLabel.textContent = theme === 'dark' ? 'Light' : 'Dark';
+      }
+
+      applyTheme(initialTheme);
+
+      themeToggle.addEventListener('click', function () {
+        const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+      });
+
+      const enterButton = document.getElementById('enterButton');
+      const dashboard = document.getElementById('dashboard');
+
+      enterButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        const top = dashboard.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top, behavior: 'smooth' });
+      });
+
+      const clocks = {
+        utc: document.getElementById('clock-utc'),
+        msk: document.getElementById('clock-msk'),
+        fra: document.getElementById('clock-fra')
+      };
+
+      function formatClock(timeZone) {
+        return new Intl.DateTimeFormat('en-GB', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+          timeZone
+        }).format(new Date());
+      }
+
+      function tick() {
+        clocks.utc.textContent = formatClock('UTC');
+        clocks.msk.textContent = formatClock('Europe/Moscow');
+        clocks.fra.textContent = formatClock('Europe/Berlin');
+      }
+
+      tick();
+      setInterval(tick, 1000);
+
+      const incusStatus = document.getElementById('status-incus');
+      const xuiStatus = document.getElementById('status-xui');
+      const incusUrl = 'http://91.238.123.4:2280';
+      const xuiUrl = 'https://91.238.123.4:27552/9xTbksUarWItEp0GBu/';
+
+      function setStatus(el, mode, label) {
+        el.className = 'status-pill ' + mode;
+        el.querySelector('span:last-child').textContent = label;
+      }
+
+      async function probe(url, timeoutMs) {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          await fetch(url, {
+            mode: 'no-cors',
+            cache: 'no-store',
+            signal: controller.signal
+          });
+          clearTimeout(timeout);
+          return true;
+        } catch (error) {
+          clearTimeout(timeout);
+          return false;
+        }
+      }
+
+      async function updateStatus(el, url) {
+        setStatus(el, 'status-checking', 'checking');
+        const online = await probe(url, 3000);
+        setStatus(el, online ? 'status-online' : 'status-offline', online ? 'online' : 'offline');
+      }
+
+      async function refreshStatuses() {
+        await updateStatus(xuiStatus, xuiUrl);
+
+        const pageIsHttps = window.location.protocol === 'https:';
+        const incusIsHttps = incusUrl.startsWith('https://');
+
+        if (pageIsHttps && !incusIsHttps) {
+          setStatus(incusStatus, 'status-unavailable', 'unavailable');
+        } else {
+          await updateStatus(incusStatus, incusUrl);
+        }
+      }
+
+      refreshStatuses();
+      setInterval(refreshStatuses, 30000);
+    })();
+  </script>
+</body>
+</html>
