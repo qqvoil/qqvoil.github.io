@@ -757,7 +757,7 @@
                 <span>unavailable</span>
               </div>
 
-              <a class="service-action secondary" href="http://91.238.123.4:2280" target="_blank" rel="noreferrer">
+              <a class="service-action secondary" href="https://df-gr.duckdns.org:8443" target="_blank" rel="noreferrer">
                 Open <span class="service-arrow">↗</span>
               </a>
             </div>
@@ -784,7 +784,7 @@
 
     <div class="footer-note">
       <span class="asterisk">*</span>
-      <span>Incus live status becomes available once that panel is exposed over HTTPS. Until then, this page keeps the check understated rather than faking certainty. The rest of the surface stays intentionally quiet — warm palette, soft grain, compact motion.</span>
+      <span>Incus now uses its HTTPS endpoint, so this page can report a proper live status. The rest of the surface stays intentionally quiet — warm palette, soft grain, compact motion.</span>
     </div>
   </div>
 
@@ -795,8 +795,7 @@
       const themeIcon = document.getElementById('themeIcon');
       const themeLabel = document.getElementById('themeLabel');
       const storedTheme = localStorage.getItem('voil-theme');
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
+      const initialTheme = storedTheme || 'light';
 
       function applyTheme(theme) {
         root.setAttribute('data-theme', theme);
@@ -848,7 +847,7 @@
 
       const incusStatus = document.getElementById('status-incus');
       const xuiStatus = document.getElementById('status-xui');
-      const incusUrl = 'http://91.238.123.4:2280';
+      const incusUrl = 'https://df-gr.duckdns.org:8443';
       const xuiUrl = 'https://91.238.123.4:27552/9xTbksUarWItEp0GBu/';
 
       function setStatus(el, mode, label) {
